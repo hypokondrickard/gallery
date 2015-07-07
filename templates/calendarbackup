@@ -1,0 +1,51 @@
+<!doctype html>
+<title>Gallery</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+
+<table border=0>
+<tr>
+
+
+{% for ar, aret in dates.iteritems() %}
+	<dt>ar:{{ ar }}</dt>
+	{% set monthiterator = 1 %}
+	{% for manad, dagar in dates[ar].iteritems() %}
+		<td>
+		<table border=0>
+ 		<tr>
+		{{ manad }}<br>
+		{% set dayiterator = 1 %}
+		<td>M</td>
+		<td>T</td>
+		<td>O</td>
+		<td>T</td>
+		<td>F</td>
+		<td>L</td>
+		<td>S</td>
+		</tr><tr>
+		{% for dag, bilder in dates[ar][manad].iteritems() %}		
+			<td>
+				{{ bilder }}
+			</td>
+			{% if dayiterator is divisibleby 7 %}
+				</tr><tr>
+			{% endif %}
+			{% set dayiterator = dayiterator + 1 %}
+		{% endfor %}
+
+		</tr>
+		</table>
+		</td>
+		{% if monthiterator is divisibleby 3 %}
+			</tr><tr>
+		{% endif %}
+		{% set monthiterator = monthiterator + 1 %}
+	{% endfor %}
+{% endfor %}
+</tr>
+</table>
+
+
+</div>
+{% block body %}{% endblock %}

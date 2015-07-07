@@ -1,0 +1,30 @@
+<!doctype html>
+<title>Gallery</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+  <h1>Gallery</h1>
+  {% if returndir == "/" %}
+    <div class="header"><a href="{{ url_for('show_pictures') }}">..</a></div>
+  {% elif returndir %}
+     <div class="header"><a href="{{ url_for('select_album') }}?dir={{ returndir }}">..</a></div>
+  {% else %}
+      <div class="header">.</div>
+  {% endif %}
+
+  {% for dir in dirs %}
+    {% if basedir %}
+      <div class="dir"><a href="{{ url_for('select_album') }}?dir={{ basedir }}/{{ dir }}">{{ dir }}</a></div>
+    {% else %}
+      <div class="dir"><a href="{{ url_for('select_album') }}?dir={{ dir }}">{{ dir }}</a></div>
+    {% endif %}
+  {% endfor %}
+
+  {% for picture in pictures %}
+  {% if basedir %}
+    <div class="picture"><a href="{{ url_for('get_image') }}?filename={{ basedir + '/' + picture }}">{{ picture }}</a></div>
+  {% else %}
+    <div class="picture"><a href="{{ url_for('get_image') }}?filename={{ '/' + picture }}">{{ picture }}</a></div>
+  {% endif %}
+  {% endfor %}
+</div>
+{% block body %}{% endblock %}

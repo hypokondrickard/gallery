@@ -1,0 +1,17 @@
+<!doctype html>
+<title>Gallery</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+<h1>Gallery</h1>
+	{% set iterator = 1 %}
+	{% for key in keys %}		
+		<td align=right>
+			<a href="{{ url_for('get_image') }}?key={{key.0}}"><img width=100 src="{{ url_for('get_image') }}?key={{key.0}}"></a>
+		</td>
+		{% if iterator is divisibleby 3 %}
+			<br>
+		{% endif %}
+		{% set iterator = iterator + 1 %}
+	{% endfor %}
+</div>
+{% block body %}{% endblock %}
