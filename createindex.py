@@ -1,5 +1,6 @@
-from os import listdir, makedirs, getcwd
+from os import listdir, makedirs, getcwd, walk
 from os.path import isfile, join, exists, isdir
+import os, fnmatch
 import exifread
 import sys
 import re
@@ -9,7 +10,7 @@ import sqlite3
 
 conn = sqlite3.connect('/tmp/example.db')
 c = conn.cursor()
-#c.execute('''DROP TABLE bilder''')
+c.execute('''DROP TABLE bilder''')
 c.execute('''CREATE TABLE bilder (primkey,filename,year,month,day,lon,lat,ctimestamp)''')
 
 def gps2Num(coordParts):
@@ -62,7 +63,11 @@ def getGps(exifCoord):
 
 
 path_name = "/Users/rickard/Pictures/testdir"
-files = [ f for f in listdir(path_name) if isfile(join(path_name,f))]
+files = []
+for root, dirnames, filenames in os.walk(path_name):
+  for filename in filenames:
+    files.append(os.path.join(root, filename))
+ 
 
 #database key, will be incremented after each insert 
 primkey = 0
@@ -70,7 +75,7 @@ primkey = 0
 for image in files:
     if "JPG" not in image: continue
 
-    with open(path_name+"/"+image, "rb") as f:
+    with open(image, "rb") as f:
         tags = exifread.process_file(f, stop_tag='EXIF DateTimeOriginal')
         #datestr = "0"
         #for tag in tags:
@@ -94,7 +99,7 @@ for image in files:
             elif tag == "GPS GPSLatitude":
                 latitude = getGps(tags["GPS GPSLatitude"])
 
-        filename = path_name+"/"+image
+        filename = image
         #print year+month+day
         #print longitude
         #print latitude
