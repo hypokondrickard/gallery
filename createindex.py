@@ -75,39 +75,44 @@ primkey = 0
 for image in files:
     if "JPG" not in image: continue
 
-    f = open(image, "rb")
-    tags = exifread.process_file(f, stop_tag='EXIF DateTimeOriginal')
-    #datestr = "0"
-    #for tag in tags:
-    #    part1 = tag.split(' ')[0]
-    #    if part1 == "GPS":
-    #        print tag
+    with open(image, "rb") as f:
+        try:
+            tags = exifread.process_file(f, stop_tag='EXIF DateTimeOriginal')
+        except MemoryError:
+            pass
 
-    year = month = day = longitude = latitude = 0
+        #datestr = "0"
+        #for tag in tags:
+        #    part1 = tag.split(' ')[0]
+        #    if part1 == "GPS":
+        #        print tag
 
-    for tag in tags.keys():
-        if tag == ("EXIF DateTimeOriginal") or tag == "Image DateTime":
-            #print "ena datumet"
-            day = month = year = 0
-            datestr = str(tags["EXIF DateTimeOriginal"])
-            m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
-            day = int(m.group(3))
-            month = int(m.group(2))
-            year = int(m.group(1))
-        elif tag == "GPS GPSLongitude":
-            longitude =  getGps(tags["GPS GPSLongitude"])
-        elif tag == "GPS GPSLatitude":
-            latitude = getGps(tags["GPS GPSLatitude"])
+        year = month = day = longitude = latitude = 0
 
-    filename = image
-    #print year+month+day
-    #print longitude
-    #print latitude
-    #print("ar: %d manad: %d dag: %d" % (year, month, day))
-    sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
-    print sql
-    c.execute(sql)
-    primkey = primkey+1
+        for tag in tags.keys():
+            if tag == ("EXIF DateTimeOriginal") or tag == "Image DateTime":
+                #print "ena datumet"
+                day = month = year = 0
+                datestr = str(tags["EXIF DateTimeOriginal"])
+                m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
+                day = int(m.group(3))
+                month = int(m.group(2))
+                year = int(m.group(1))
+            elif tag == "GPS GPSLongitude":
+                longitude =  getGps(tags["GPS GPSLongitude"])
+            elif tag == "GPS GPSLatitude":
+                latitude = getGps(tags["GPS GPSLatitude"])
+
+        filename = image
+        #print year+month+day
+        #print longitude
+        #print latitude
+        #print("ar: %d manad: %d dag: %d" % (year, month, day))
+        sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
+        print sql
+        c.execute(sql)
+        primkey = primkey+1
+
 
 conn.commit()
 

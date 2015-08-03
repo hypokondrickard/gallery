@@ -67,7 +67,7 @@ def update_calendar(picyear,picmonth,picday,calendarDict):
     return calendarDict
 
 def main(requestedyear):
-    conn = sqlite3.connect("/tmp/example.db")
+    conn = sqlite3.connect("/tmp/gallery.db")
     c = conn.cursor()
     sql = "SELECT year,month,day FROM bilder WHERE year='%s' ORDER BY ctimestamp ASC" % (requestedyear)
 
