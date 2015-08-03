@@ -8,9 +8,8 @@ import math
 import __future__
 import sqlite3
 
-conn = sqlite3.connect('/tmp/example.db')
+conn = sqlite3.connect('/tmp/gallery.db')
 c = conn.cursor()
-c.execute('''DROP TABLE bilder''')
 c.execute('''CREATE TABLE bilder (primkey,filename,year,month,day,lon,lat,ctimestamp)''')
 
 def gps2Num(coordParts):

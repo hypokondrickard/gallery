@@ -29,10 +29,10 @@ def get_files_and_subdirs_from(workingdir):
     else:
         return [os.path.abspath(workingdir)], [workingdir]
 
-@app.route('/')
-def show_pictures():
-    pictures, dirs = get_files_and_subdirs_from(basedir)
-    return render_template('index.html', pictures=pictures, dirs=dirs)
+#@app.route('/')
+#def show_pictures():
+#    pictures, dirs = get_files_and_subdirs_from(basedir)
+#    return render_template('index.html', pictures=pictures, dirs=dirs)
 
 @app.route('/select', methods=['GET'])
 def select_album():
@@ -54,12 +54,12 @@ def get_image():
     else:
         return send_file("/Users/rickard/Documents/repos/gallery/gtfo.jpg", mimetype='image/jpeg')
 
-@app.route('/calendar', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_calendar_view():
     if request.args:
         return render_template('calendar.html', dates=getalldateswithpictures.main(str(int(request.args.get('year'))+0)))
     else:
-        return render_template('calendar.html', dates=getalldateswithpictures.main(2012))
+        return render_template('calendar.html', dates=getalldateswithpictures.main(2015))
 
 @app.route('/get_date', methods=['GET'])
 def get_date():
