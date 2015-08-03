@@ -61,7 +61,8 @@ def getGps(exifCoord):
     return degrees+(((minutes * 60) + seconds + (seconds - math.floor(seconds))*60)/3600)
 
 
-path_name = "/Users/rickard/Pictures/testdir"
+path_name = sys.argv[1]
+
 files = []
 for root, dirnames, filenames in os.walk(path_name):
   for filename in filenames:
@@ -74,39 +75,39 @@ primkey = 0
 for image in files:
     if "JPG" not in image: continue
 
-    with open(image, "rb") as f:
-        tags = exifread.process_file(f, stop_tag='EXIF DateTimeOriginal')
-        #datestr = "0"
-        #for tag in tags:
-        #    part1 = tag.split(' ')[0]
-        #    if part1 == "GPS":
-        #        print tag
+    f = open(image, "rb")
+    tags = exifread.process_file(f, stop_tag='EXIF DateTimeOriginal')
+    #datestr = "0"
+    #for tag in tags:
+    #    part1 = tag.split(' ')[0]
+    #    if part1 == "GPS":
+    #        print tag
 
-        year = month = day = longitude = latitude = 0
+    year = month = day = longitude = latitude = 0
 
-        for tag in tags.keys():
-            if tag == ("EXIF DateTimeOriginal") or tag == "Image DateTime":
-                #print "ena datumet"
-                day = month = year = 0
-                datestr = str(tags["EXIF DateTimeOriginal"])
-                m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
-                day = int(m.group(3))
-                month = int(m.group(2))
-                year = int(m.group(1))
-            elif tag == "GPS GPSLongitude":
-                longitude =  getGps(tags["GPS GPSLongitude"])
-            elif tag == "GPS GPSLatitude":
-                latitude = getGps(tags["GPS GPSLatitude"])
+    for tag in tags.keys():
+        if tag == ("EXIF DateTimeOriginal") or tag == "Image DateTime":
+            #print "ena datumet"
+            day = month = year = 0
+            datestr = str(tags["EXIF DateTimeOriginal"])
+            m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
+            day = int(m.group(3))
+            month = int(m.group(2))
+            year = int(m.group(1))
+        elif tag == "GPS GPSLongitude":
+            longitude =  getGps(tags["GPS GPSLongitude"])
+        elif tag == "GPS GPSLatitude":
+            latitude = getGps(tags["GPS GPSLatitude"])
 
-        filename = image
-        #print year+month+day
-        #print longitude
-        #print latitude
-        #print("ar: %d manad: %d dag: %d" % (year, month, day))
-        sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
-        print sql
-        c.execute(sql)
-        primkey = primkey+1
+    filename = image
+    #print year+month+day
+    #print longitude
+    #print latitude
+    #print("ar: %d manad: %d dag: %d" % (year, month, day))
+    sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
+    print sql
+    c.execute(sql)
+    primkey = primkey+1
 
 conn.commit()
 
