@@ -98,14 +98,14 @@ for image in files:
     except KeyError:
         pass
 
-        filename = image
-        #print year+month+day
-        #print longitude
-        #print latitude
-        #print("ar: %d manad: %d dag: %d" % (year, month, day))
-        sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
-        c.execute(sql)
-        primkey = primkey+1
+    filename = image
+    #print year+month+day
+    #print longitude
+    #print latitude
+    #print("ar: %d manad: %d dag: %d" % (year, month, day))
+    sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
+    c.execute(sql)
+    primkey = primkey+1
 
 
 conn.commit()
