@@ -1,7 +1,7 @@
 from os import listdir, makedirs, getcwd, walk
 from os.path import isfile, join, exists, isdir
 import os, fnmatch
-import exifread
+import pyexiv2
 import sys
 import re
 import math
@@ -25,17 +25,20 @@ def gps2Num(coordParts):
 
     return float(parts[0]) / float(parts[1])
 
-def getGps(exifCoord):
-    if len(exifCoord.values) == 3:
-        degrees = gps2Num(exifCoord.values[0])
-        minutes = gps2Num(exifCoord.values[1])
-        seconds = gps2Num(exifCoord.values[2])
-    elif len(exifCoord.values) == 2:
-        degrees = gps2Num(exifCoord.values[0])
-        minutes = gps2Num(exifCoord.values[1])
+def getGps(exifCoordinput):
+    exifCoord = []
+    exifCoord = exifCoordinput.split(" ")
+
+    if len(exifCoord) == 3:
+        degrees = gps2Num(exifCoord[0])
+        minutes = gps2Num(exifCoord[1])
+        seconds = gps2Num(exifCoord[2])
+    elif len(exifCoord) == 2:
+        degrees = gps2Num(exifCoord[0])
+        minutes = gps2Num(exifCoord[1])
         seconds = 0
-    elif len(exifCoord.values) == 1:
-        degrees = gps2Num(exifCoord.values[0])
+    elif len(exifCoord) == 1:
+        degrees = gps2Num(exifCoord[0])
         minutes = 0
         seconds = 0
     else:
@@ -75,33 +78,25 @@ primkey = 0
 for image in files:
     if "JPG" not in image: continue
 
-    with open(image, "rb") as f:
-        try:
-            tags = exifread.process_file(f, stop_tag='EXIF DateTimeOriginal')
-        except MemoryError:
-            pass
+    year = month = day = longitude = latitude = 0
+    try:
+        metadata = pyexiv2.ImageMetadata(image)
+        metadata.read()
+    except KeyError:
+        pass
 
-        #datestr = "0"
-        #for tag in tags:
-        #    part1 = tag.split(' ')[0]
-        #    if part1 == "GPS":
-        #        print tag
+    datestr = str(metadata['Exif.Photo.DateTimeOriginal'].raw_value)
 
-        year = month = day = longitude = latitude = 0
+    m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
+    day = int(m.group(3))
+    month = int(m.group(2))
+    year = int(m.group(1))
 
-        for tag in tags.keys():
-            if tag == ("EXIF DateTimeOriginal") or tag == "Image DateTime":
-                #print "ena datumet"
-                day = month = year = 0
-                datestr = str(tags["EXIF DateTimeOriginal"])
-                m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
-                day = int(m.group(3))
-                month = int(m.group(2))
-                year = int(m.group(1))
-            elif tag == "GPS GPSLongitude":
-                longitude =  getGps(tags["GPS GPSLongitude"])
-            elif tag == "GPS GPSLatitude":
-                latitude = getGps(tags["GPS GPSLatitude"])
+    try:
+        longitude =  getGps(metadata['Exif.GPSInfo.GPSLongitude'].raw_value)
+        latitude = getGps(metadata['Exif.GPSInfo.GPSLatitude'].raw_value)
+    except KeyError:
+        pass
 
         filename = image
         #print year+month+day
