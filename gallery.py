@@ -3,6 +3,7 @@ from flask import Flask, request, g, redirect, url_for, abort, render_template, 
 import os, re
 import getpicbykey
 import getpicsbydate
+import getrandompic
 import getalldateswithpictures
 
 
@@ -47,9 +48,15 @@ def select_album():
 
 @app.route('/get_image', methods=['GET'])
 def get_image():
-    if request.args['key']:
+    if request.args.has_key('key'):
+        print "hej"
         key = request.args.get('key')
         fullpath = getpicbykey.main(key)[1]
+        return send_file(fullpath, mimetype='image/jpeg')
+    elif request.args.has_key('random'):
+        print "da"
+        fullpath = getrandompic.main()[1]
+        print fullpath
         return send_file(fullpath, mimetype='image/jpeg')
     else:
         return send_file("/Users/rickard/Documents/repos/gallery/gtfo.jpg", mimetype='image/jpeg')
