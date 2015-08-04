@@ -104,14 +104,9 @@ for image in files:
         #print latitude
         #print("ar: %d manad: %d dag: %d" % (year, month, day))
         sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','0');" % (primkey, filename , year, month, day, longitude, latitude)
-        print sql
         c.execute(sql)
         primkey = primkey+1
 
 
 conn.commit()
-
-for row in c.execute("select * from bilder"):
-    print row
-
 conn.close()
