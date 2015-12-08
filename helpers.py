@@ -6,11 +6,18 @@ import calendar
 from flask import g
 
 def get_pics_by_date(year,month,day):
+
+    datestr = "%s:%s:%s 00:00:00" % (year,month,day)
+    date_obj_string = datetime.datetime.strptime(datestr, '%Y:%m:%d %H:%M:%S')
+    tstamp_start = int(time.mktime(date_obj_string.timetuple()))
+    tstamp_end = tstamp_start + 86400
+
     c = g.db.cursor()
 
-    sql = "SELECT primkey FROM bilder WHERE year='%s' AND month='%s' AND day='%s' ORDER BY ctimestamp ASC" % (year, month, day)
-    
+    sql = "SELECT primkey FROM bilder WHERE ctimestamp BETWEEN %s and %s ORDER BY ctimestamp ASC" % (tstamp_start, tstamp_end)
+
     pickeys = []
+    
     for row in c.execute(sql):
         pickeys.append(row)
 

@@ -88,10 +88,9 @@ for image in files:
         pass
 
     datestr = str(metadata['Exif.Photo.DateTimeOriginal'].raw_value)
-    print datestr
     m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
     day = int(m.group(3))
-    month = int(m.group(2))
+    month = int(m.
     year = int(m.group(1))
   
     date_obj_string = datetime.datetime.strptime(datestr, '%Y:%m:%d %H:%M:%S')
@@ -111,7 +110,7 @@ for image in files:
     #print longitude
     #print latitude
     #print("ar: %d manad: %d dag: %d" % (year, month, day))
-    sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f','%s');" % (primkey, filename , year, month, day, longitude, latitude, timestamp)
+    sql = "insert into bilder (primkey, filename, year, month, day, lon, lat, ctimestamp) values ('%d', '%s', '%d', '%d', '%d','%f','%f',%f);" % (primkey, filename , year, month, day, longitude, latitude, timestamp)
     c.execute(sql)
     primkey = primkey+1
 
