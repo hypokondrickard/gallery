@@ -52,6 +52,17 @@ def get_random():
 
     return resultat
 
+def get_date_from_picture(primkey):
+    c = g.db.cursor()
+
+    sql = "SELECT year,month,day FROM bilder WHERE primkey='%s'" % (primkey)
+    
+    c.execute(sql)
+    resultat = c.fetchone()
+
+    return resultat
+
+
 def get_neighboring_pics(pickey):
     c = g.db.cursor()
 

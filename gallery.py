@@ -53,7 +53,6 @@ def get_image():
     if request.args.has_key('key'):
         key = request.args.get('key')
         fullpath = get_pic_by_key(key)[1]
-        print get_neighboring_pics(key)
         return send_file(fullpath, mimetype='image/jpeg')
     elif request.args.has_key('random'):
         fullpath = get_random()[1]
@@ -63,7 +62,7 @@ def get_image():
 
 @app.route('/get_image_view/<primkey>')
 def get_image_view(primkey):
-    return render_template('picture.html', picture=primkey, neighbors=get_neighboring_pics(primkey))
+    return render_template('picture.html', date=get_date_from_picture(primkey), picture=primkey, neighbors=get_neighboring_pics(primkey))
 
 @app.route('/', defaults={'year': None})
 @app.route('/<year>')
