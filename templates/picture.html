@@ -1,0 +1,17 @@
+<!doctype html>
+<title>Gallery</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+  <h1>picture</h1>
+  <table>
+    <tr>
+      <td><a href={{ neighbors.0.0 }}><h2><-</h2></a></td>
+      <td><a href={{ neighbors.1.0 }}><h2>-></a></h2></td>
+    </tr>
+    <tr>
+      <td colspan=2>
+        <img src={{ url_for('get_image') }}?key={{ picture }}>
+      </td>
+    </tr>
+  </table>
+</div>

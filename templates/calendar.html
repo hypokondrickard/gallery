@@ -4,6 +4,15 @@
 <div class=page>
 
 <table border=0>
+	<tr>
+		<td>
+			{% for year in years %}
+				<a href={{ "/" ~ year }}>{{ year }}</a>
+			{% endfor %}
+		</td>
+	</tr>
+</table>
+<table border=0>
 <tr>
 
 

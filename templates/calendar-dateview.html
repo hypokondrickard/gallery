@@ -6,7 +6,7 @@
 	{% set iterator = 1 %}
 	{% for key in keys %}		
 		<td align=right>
-			<a href="{{ url_for('get_image') }}?key={{key.0}}"><img width=100 src="{{ url_for('get_image') }}?key={{key.0}}"></a>
+			<a href="{{ url_for('get_image_view', primkey=key.0) }}"><img width=100 src="{{ url_for('get_image') }}?key={{key.0}}"></a>
 		</td>
 		{% if iterator is divisibleby 3 %}
 			<br>

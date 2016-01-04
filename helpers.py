@@ -31,6 +31,17 @@ def get_pic_by_key(pickey):
     resultat = c.fetchone()
     return resultat
 
+def get_available_years():
+    c = g.db.cursor()
+
+    sql = "SELECT DISTINCT year FROM bilder ORDER BY year ASC;"
+    years = []
+    
+    for year in c.execute(sql):
+        years.append(year[0])
+
+    return years
+
 def get_random():
     c = g.db.cursor()
 
@@ -38,10 +49,28 @@ def get_random():
     
     c.execute(sql)
     resultat = c.fetchone()
+
     return resultat
 
+def get_neighboring_pics(pickey):
+    c = g.db.cursor()
 
-def get_calendar(year):
+    sql = "SELECT ctimestamp FROM bilder WHERE primkey='%s'" % (pickey)
+    c.execute(sql)
+    ctimestamp = c.fetchone()
+
+    sql_before= "select primkey from bilder where ctimestamp < %s order by ctimestamp desc limit 1;" % ctimestamp
+    c.execute(sql_before)
+    primkey_before = c.fetchone()
+
+    sql_after="select primkey from bilder where ctimestamp > %s order by ctimestamp asc limit 1;" % ctimestamp
+    c.execute(sql_after)
+    primkey_after = c.fetchone()
+
+    print (primkey_before,primkey_after)
+    return (primkey_before,primkey_after)
+
+def get_calendar_data(year):
 
     def get_name_of_month(monthnumber):
         return monthnumber
