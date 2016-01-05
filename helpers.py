@@ -55,7 +55,7 @@ def get_random():
 def get_date_from_picture(primkey):
     c = g.db.cursor()
 
-    sql = "SELECT year,month,day FROM bilder WHERE primkey='%s'" % (primkey)
+    sql = "SELECT year,month,day FROM bilder WHERE primkey='%s'" % (primkey_before)
     
     c.execute(sql)
     resultat = c.fetchone()
@@ -78,7 +78,6 @@ def get_neighboring_pics(pickey):
     c.execute(sql_after)
     primkey_after = c.fetchone()
 
-    print (primkey_before,primkey_after)
     return (primkey_before,primkey_after)
 
 def get_calendar_data(year):
