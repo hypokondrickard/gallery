@@ -36,7 +36,7 @@
 		{% for bilder in dates[ar][manad].iteritems() %}		
 			<td align=right>
 				{% if bilder.1.1 %}
-					<a href={{ url_for('get_date') }}?year={{ar}}&month={{manad}}&day={{bilder.1.0}}>{{ bilder.1.0 }}</a>
+					<a href={{ url_for('get_date',year=ar, month=manad, day=bilder.1.0) }}>{{ bilder.1.0 }}</a>
 				{% else %}
 					{{ bilder.1.0 }}
 				{% endif %}

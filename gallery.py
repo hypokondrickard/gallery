@@ -75,11 +75,25 @@ def get_calendar(year):
     else:
         return render_template('calendar.html', years=years_available, dates=get_calendar_data(year))
 
-@app.route('/get_date', methods=['GET'])
-def get_date():
-    pickeys = get_pics_by_date(request.args['year'],request.args.get('month'),request.args.get('day'))
+@app.route('/<year>/<month>/<day>', methods=['GET'])
+def get_date(year,month,day):
+    pickeys = get_pics_by_date(year,month,day)
+
+    first_picture = pickeys[0]
+    first_picture_neighbors = get_neighboring_pics(first_picture)
+    last_picture_previous_date = first_picture_neighbors[0]
+    previous_date = get_date_from_picture(last_picture_previous_date)
     
-    return render_template('calendar-dateview.html', year=request.args.get('year'), month=request.args.get('month'), day=request.args.get('day'), keys=pickeys)
+    print previous_date
+    
+    last_picture = pickeys[-1]
+    last_picture_neighbors = get_neighboring_pics(last_picture)
+    first_picture_next_date = last_picture_neighbors[1]
+    next_date = get_date_from_picture(first_picture_next_date)
+
+    print next_date
+
+    return render_template('calendar-dateview.html', year=year, month=month, day=day, keys=pickeys, next_date=next_date, previous_date=previous_date)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

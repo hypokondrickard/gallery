@@ -3,15 +3,24 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <div class=page>
 <h1>Gallery</h1>
+<table border=1>
+	<tr>
+      <td align=left><a href={{ url_for('get_date',year=previous_date.0, month=previous_date.1, day=previous_date.2) }}><h2><-</h2></a></td>
+      <td></td>
+      <td align=right><a href={{ url_for('get_date',year=next_date.0, month=next_date.1, day=next_date.2) }}><h2>-></h2></a></td>
+    </tr>
+  	<tr>
 	{% set iterator = 1 %}
 	{% for key in keys %}		
-		<td align=right>
+		<td>
 			<a href="{{ url_for('get_image_view', primkey=key.0) }}"><img width=100 src="{{ url_for('get_image') }}?key={{key.0}}"></a>
 		</td>
 		{% if iterator is divisibleby 3 %}
-			<br>
+			</tr><tr>
 		{% endif %}
 		{% set iterator = iterator + 1 %}
 	{% endfor %}
+	</tr>
+</table>
 </div>
 {% block body %}{% endblock %}
