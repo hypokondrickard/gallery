@@ -6,16 +6,14 @@
 <table border=1>
 	<tr>
       <td colspan=3 align=center>
-      <a href={{ url_for('get_date',year=previous_date.0, month=previous_date.1, day=previous_date.2) }}><h2><-</h2></a>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a href={{ url_for('get_date',year=next_date.0, month=next_date.1, day=next_date.2) }}><h2>-></h2></a>
+      <a href={{ url_for('get_date',year=previous_date.0, month=previous_date.1, day=previous_date.2) }}><h2><-</h2></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href={{ url_for('get_date',year=next_date.0, month=next_date.1, day=next_date.2) }}><h2>-></h2></a>
       </td>
     </tr>
   	<tr>
 	{% set iterator = 1 %}
 	{% for key in keys %}		
 		<td>
-			<a href="{{ url_for('get_image_view', primkey=key.0) }}"><img width=200 src="{{ url_for('get_image') }}?key={{key.0}}"></a>
+			<a href="{{ url_for('get_image_view', primkey=key.0) }}"><img width=175 src="{{ url_for('get_image') }}?key={{key.0}}"></a>
 		</td>
 		{% if iterator is divisibleby 3 %}
 			</tr><tr>
