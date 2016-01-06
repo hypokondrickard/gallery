@@ -84,8 +84,8 @@ def get_calendar(year):
 
 @app.route('/<year>/<month>/<day>', methods=['GET'])
 def get_date(year,month,day):
-    pickeys = get_pics_by_date(year,month,day)
-
+    pickeys = get_pics_by_date(year,month,day)['pickeys']
+    
     first_picture = pickeys[0]
     first_picture_neighbors = get_neighboring_pics(first_picture)
     last_picture_previous_date = first_picture_neighbors[0]
