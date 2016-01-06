@@ -17,6 +17,11 @@ DATABASE = "/tmp/gallery.db"
 def before_request():
     g.db = sqlite3.connect(DATABASE)
 
+@app.after_request
+def add_header(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 @app.teardown_request
 def teardown_request(exception):
     if hasattr(g, 'db'):
