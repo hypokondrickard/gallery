@@ -3,7 +3,21 @@ import sys
 import datetime
 import time
 import calendar
+from collections import defaultdict
 from flask import g
+
+def get_pics_by_year(year):
+    c = g.db.cursor()
+
+    sql = "SELECT month,primkey FROM bilder WHERE year='%s'" % year
+
+    this_year = defaultdict(list)
+
+    for row in c.execute(sql):
+        this_year[row[0]].append(row[1])
+
+    return {"year": year, "months": this_year }
+
 
 def get_pics_by_date(year,month,day):
 
@@ -21,7 +35,7 @@ def get_pics_by_date(year,month,day):
     for row in c.execute(sql):
         pickeys.append(row)
 
-    return pickeys
+    return {"year": year, "month": month, "day": day, "pickeys": pickeys}
 
 def get_pic_by_key(pickey):
     c = g.db.cursor()

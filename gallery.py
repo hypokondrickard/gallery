@@ -1,7 +1,8 @@
-from flask import Flask, request, g, redirect, url_for, abort, render_template, flash, send_file
+from flask import Flask, request, g, redirect, url_for, abort, render_template, flash, send_file, jsonify
 from flask_restful import Resource, Api
 from helpers import *
 import os, re
+import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,9 +22,15 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
+class Get_pics_by_year(Resource):
+    def get(self, year):
+        return jsonify(get_pics_by_year(year))
+
+api.add_resource(Get_pics_by_year, '/get_pics_by_year/<string:year>')
+
 class Get_pics_by_date(Resource):
     def get(self, year, month, day):
-        return {"id": get_pics_by_date(year,month,day)}
+        return jsonify(get_pics_by_date(year,month,day))
 
 api.add_resource(Get_pics_by_date, '/get_pics_by_date/<string:year>/<string:month>/<string:day>')
 
