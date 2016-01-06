@@ -20,6 +20,7 @@ def before_request():
 @app.after_request
 def add_header(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With'
     return response
 
 @app.teardown_request
