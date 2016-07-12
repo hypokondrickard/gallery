@@ -86,11 +86,14 @@ for image in files:
         metadata.read()
     except KeyError:
         pass
+    except IOError:
+	print "TRASIG BILDFIL!!!!!"
+	continue
 
     datestr = str(metadata['Exif.Photo.DateTimeOriginal'].raw_value)
     m = re.match("(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", datestr)
     day = int(m.group(3))
-    month = int(m.
+    month = int(m.group(2))
     year = int(m.group(1))
   
     date_obj_string = datetime.datetime.strptime(datestr, '%Y:%m:%d %H:%M:%S')

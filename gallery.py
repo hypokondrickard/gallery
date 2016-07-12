@@ -28,6 +28,12 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
+class Get_years(Resource):
+    def get(self):
+        return jsonify({"years": get_available_years()})
+
+api.add_resource(Get_years, '/get_years')
+
 class Get_pics_by_year(Resource):
     def get(self, year):
         return jsonify(get_pics_by_year(year))
